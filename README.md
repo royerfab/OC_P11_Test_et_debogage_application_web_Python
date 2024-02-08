@@ -1,4 +1,4 @@
-# gudlift-registration QA
+# gudlift-registration
 
 1. Why
 
