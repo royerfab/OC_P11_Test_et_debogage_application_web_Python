@@ -1,5 +1,6 @@
 import json
 from flask import Flask,render_template,request,redirect,flash,url_for
+import datetime
 
 
 def loadClubs():
@@ -40,13 +41,19 @@ def book(competition,club):
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
     if foundClub and foundCompetition:
         max_booking_places = int(foundClub['points'])
-        if max_booking_places > 12:
-            max_booking_places = 12
-        return render_template('booking.html',club=foundClub,competition=foundCompetition,
-                               max_booking_places=max_booking_places)
+        competition_date = foundCompetition['date']
+        competition_date = datetime.datetime.strptime(competition_date, "%Y-%m-%d %H:%M:%S").date()
+        today = datetime.date.today()
+        if competition_date >= today:
+            if max_booking_places > 12:
+                max_booking_places = 12
+            return render_template('booking.html',club=foundClub,competition=foundCompetition,
+                                   max_booking_places=max_booking_places)
+        else:
+            flash("This competitions is over.")
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+    return render_template('welcome.html', club=foundClub, competitions=competitions)
 
 @app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
@@ -54,7 +61,12 @@ def purchasePlaces():
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
     available_points = int(club['points'])
-    if placesRequired <= available_points:
+    competition_date = competition['date']
+    competition_date = datetime.datetime.strptime(competition_date, "%Y-%m-%d %H:%M:%S").date()
+    today = datetime.date.today()
+    if competition_date < today:
+        flash("This competitions is over.")
+    elif placesRequired <= available_points:
         if placesRequired <= 12:
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             club['points'] = int(club['points'])-int(placesRequired)
