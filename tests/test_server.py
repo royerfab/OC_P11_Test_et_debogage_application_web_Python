@@ -1,3 +1,4 @@
+"""
 from server import loadClubs, loadCompetitions, index, showSummary, book, purchasePlaces, logout
 import server
 import json
@@ -90,3 +91,5 @@ def purchasePlaces():
     else:
         flash("The club has not enough available points")
     return render_template('welcome.html', club=club, competitions=competitions)
+
+"""

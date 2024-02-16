@@ -4,3 +4,9 @@ lib
 .Python
 .envrc
 __pycache__
+past_competitions.py
+places_required.py
+points_available.py
+clubs_2.json
+competitions_2.json
+test.json
