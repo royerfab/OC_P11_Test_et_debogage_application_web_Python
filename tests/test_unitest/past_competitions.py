@@ -17,3 +17,11 @@ def test_past_competition_invalid(mock_clubs, mock_competitions):
         data = response.data.decode()
         assert "This competitions is over." in data
 
+
+def club_and_competition_invalid(mock_clubs, mock_competitions):
+
+    with app.test_client() as client:
+        response = client.post('/book/<competition>/<club>', data={'competition' : 'aaa', 'club' : 'aaa', 'places': 8})
+        data = response.data.decode()
+        assert "Something went wrong-please try again" in data
+

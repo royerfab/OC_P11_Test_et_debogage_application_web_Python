@@ -29,5 +29,4 @@ def test_required_places_valid(mock_clubs, mock_competitions):
         response = client.post('/purchasePlaces', data={'competition' : 'comp 2', 'club' : 'test', 'places': 8})
         assert response.status_code == 200
         data = response.data.decode()
-        print(data)
         assert "Number of Places: 7" in data
